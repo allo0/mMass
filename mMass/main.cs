@@ -9,13 +9,12 @@ namespace mMass
     {
         static void Main(string[] args)
         {
-            int y = -3;
-            int x = Math.Abs(y);
-
+           
+            double e;
             modBasics newMod = new modBasics();
 
-            newMod.move();
-            Console.WriteLine("Hellao World! {0}",x);
+           newMod.move();
+            
       
         }
     }

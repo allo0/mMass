@@ -2,6 +2,9 @@
 using System.Text;
 using System.Text.RegularExpressions; // re
 using System;// math(implemented in System)
+using System.Linq;
+using System.Collections;
+
 
 //stoper
 //obj_compound
@@ -11,7 +14,7 @@ namespace mMass
 {
     class modBasics:obj_compound
     {
-        const double ELECTRON_MASS = 0.00054857990924;
+        const float ELECTRON_MASS = 0.00054857990924f;
         const string FORMULA_PATTERN = @"^(
                                         ([\(])* # start parenthesis
                                         (
@@ -29,17 +32,29 @@ namespace mMass
 
         public void move()
         {
-            obj_compound myBase = new obj_compound();
-            modBasics myDerived = new modBasics();
-            object o = myDerived;
-            obj_compound b = myDerived;
 
-            //if (String.Compare(agentFormula,"e")==0 && agentFormula.IsInstance)
-            Console.WriteLine("mybase: Type is {0}", myBase.GetType());
-            Console.WriteLine("myDerived: Type is {0}", myDerived.GetType());
-            Console.WriteLine("object o = myDerived: Type is {0}", o.GetType());
-            Console.WriteLine("MyBaseClass b = myDerived: Type is {0}", b.GetType());
+           
+
+           
+            /* var base1 = new obj_compound();
+             var agentFormulas = base1.GetType();
+             Console.WriteLine("Is agetnFormulas an instance of BaseClass? {0}",
+                             agentFormulas.IsInstanceOfType(base1));
+             if ( !(agentFormulae=="e") && agentFormulas.IsInstanceOfType(base1))
+             {
+                 Console.WriteLine("This is a detest" );
+             }*/
+
+             obj_compound searcher = new obj_compound();
+             string agentFormulae = "H";
+            if (!(agentFormulae == "e") && !agentFormulae.Equals(searcher.hi()))
+                Console.WriteLine("holla {0}",
+                        searcher.hi().GetType() );
+
+           
         }
+
+      
 
         public float delta(float measuredMass,float countedMass,string units)
         {
@@ -51,11 +66,11 @@ namespace mMass
                   """
             */
 
-            if (String.Compare(units, "ppm") == 1)
+            if (units == "ppm")
                 return (measuredMass - countedMass) / countedMass * 1000000;
-            else if (String.Compare(units, "Da") == 1)
+            else if (units == "Da")
                 return (measuredMass - countedMass);
-            else if (String.Compare(units, "%") == 1)
+            else if (units == "%")
                 return (measuredMass - countedMass) / countedMass * 100;
             else
             {
@@ -76,11 +91,35 @@ namespace mMass
                     massType (0 or 1)(false or true) - used mass type if mass value is float, 0(false) = monoisotopic, 1(true) = average
                 """
              */
+            
             currentCharge = 0;
             agentFormula = "H";
             agentCharge = 1;
             massType = false;
+            obj_compound searcher = new obj_compound(); //for the isinstace
 
+
+            if( !(agentFormula == "e") && !agentFormula.Equals(searcher.hi())   ) //isinstance comp
+            {
+                //
+            }
+            if (agentFormula == "e")
+            {
+                float[] agentMass = new float[1];
+                agentMass[0] = ELECTRON_MASS;
+                agentMass[1] = ELECTRON_MASS;
+            }
+            else
+            {
+
+            }
+
+            int agentCount = currentCharge / agentCharge;
+            if (currentCharge != 0)
+            {
+
+            }
+            
 
 
             return 0;

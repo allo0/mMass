@@ -6,6 +6,12 @@ namespace mMass
 {
     class obj_compound
     {
-        
+        public string hi()
+        {
+            string agentFormulae="H";
+
+           return   agentFormulae;
+            
+        }
     }
 }
