@@ -135,9 +135,9 @@ namespace mMass
             int agentCount = currentCharge / agentCharge;
             if (currentCharge != 0)
             {
-                if () {
-                } // na to κανω αφου κανω τους Constructors στην obj_compound
-                else
+              //  if () {
+              //  } // na to κανω αφου κανω τους Constructors στην obj_compound
+              //  else
                     mass[0] = searcher.mass().Item1;
                 mass[1] = searcher.mass().Item2;
                 for(int i=0;i<2;i++)
@@ -149,7 +149,7 @@ namespace mMass
 
             }
             if(charge==0)
-                return
+              //  return
 
 
             return 0;

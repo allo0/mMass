@@ -6,9 +6,8 @@ namespace mMass
 {
     class obj_compound
     {
-        public obj_compound(string expression)
-        {
-            this.
+        public obj_compound(string expression, List<string> atrr) { 
+            //this.
         }
         public string func_meto_compound()
         {
@@ -20,10 +19,12 @@ namespace mMass
 
         public double he()
         {
-            double[] agentMass = new double[2];
-            agentMass[0] = 1.123145;
-            agentMass[1] = 2.231416;
-            return agentMass[1];
+                    double[] agentMass = new double[2];                
+                    agentMass[0] = 1.123145;
+                    agentMass[1] = 2.231416;
+
+                    return agentMass[1];
+                
         }
         public Tuple<double, double> mass()
         {
