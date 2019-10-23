@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-
-namespace mMass
+﻿namespace mMass
 {
-    class main
+    internal class main
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-           
-            double e;
             modBasics newMod = new modBasics();
 
-           newMod.move();
-            
-      
+            newMod.move();
         }
     }
 }
