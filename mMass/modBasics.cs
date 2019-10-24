@@ -1,9 +1,6 @@
 ﻿using System;// math(implemented in System)
 using System.Text.RegularExpressions; // re
 
-//stoper
-//obj_compound
-
 namespace mMass
 {
     internal class modBasics
