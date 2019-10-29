@@ -1,4 +1,5 @@
 ﻿using System;// math(implemented in System)
+using System.Data;
 using System.Text.RegularExpressions; // re
 
 namespace mMass
@@ -7,35 +8,34 @@ namespace mMass
     {
         public const double ELECTRON_MASS = 0.00054857990924d;
         public const string FORMULA_PATTERN = @"^(([\(])*(([A-Za-z0-2])(\{[\d]+\})?(([\-][\d]+)|[\d]*))+([\)][\d]*)*)*$";
-        public const string ELEMENT_PATTERN = @"([A-Za-z0-2])(?:\{([\d]+)\})?([\-]?[\d]*)";
+        public const string ELEMENT_PATTERN = @"([A-Za-z0-2])(\{[\d]+\})?(([\-][\d]+)|[\d]*)";
 
         public void move()
         {
-            double[] agentMass = new double[2];
-            string agentFormula = "H";
-            int agentCharge = 1;
+            ///*
+            // * Αυτές οι γραμμές απο κάτω 8α αντικαταστήσουν μαλλον το ήδη υπάρχον
+            // */
+            //object[] atom = new object[2];
+            //atom[0] = "C38H65N11O11S";//8a fygei apla gia testing;
+            //MatchCollection matchEL = Regex.Matches(atom[0].ToString(), ELEMENT_PATTERN);
+            //Match firstMatch = matchEL[0];
+            //int i = 0;
+            //foreach (Match fm in matchEL)
+            //{
+            //    Console.WriteLine(matchEL[i]);
+            //    i++;
+            //}
 
-            obj_compound searcher = new obj_compound(); //for the isinstace
-            agentMass[0] = searcher.mass().Item1;
-            agentMass[1] = searcher.mass().Item2;
+            ///*
+            // * Ηδη υπάρχον
+            // */
+            //string match;
+            //object[] atom = new object[2];
+            //atom[0] = "C38H65N11O11S";//8a fygei apla gia testing;
+            //Match matchEL = Regex.Match(atom[0].ToString(), modBasics.ELEMENT_PATTERN);
 
-            string input2 = "8";
-            string input3 = "C26H48N8O8";
-            Match match2 = Regex.Match(input3, FORMULA_PATTERN);
-
-            Console.WriteLine(match2.Success);
-            string key = match2.Groups[0].Value;
-            Console.WriteLine(key);
-            Console.WriteLine(TextTool.CountStringOccurrences(input3, input2));
-
-            /*
-            atom = new string[2] { "Hi", "HO" };
-            Console.WriteLine(atom.Length);
-            */
-            for (int i = 0; i < TextTool.CountStringOccurrences(input3, input2); i++)
-            {
-                Console.WriteLine("...");
-            }
+            //match = matchEL.Groups[0].Value;
+            //Console.WriteLine(match);
         }
 
         public float delta(float measuredMass, float countedMass, string units)
