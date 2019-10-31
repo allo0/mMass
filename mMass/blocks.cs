@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 //using System.IO;
 //using System.Xml;
@@ -19,14 +17,11 @@ namespace mMass
 
         public int atomicNumber;
         public int valence;
-        public double[] isotop;
+
         public double[] mass = new double[2];
         public string name;
         public string symbol;
-        public object[] mass_abud = new object[2];//for the isotope dictionary
-
-                                                  // public Dictionary<double, object> isotopes = new Dictionary<double, object>();
-        public DataTable isotopes = new DataTable();
+        public Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
 
         public element()
         {
@@ -35,41 +30,45 @@ namespace mMass
 
             string name = this.name;
             string symbol = this.symbol;
-            // Dictionary<double, object> isotopes = new Dictionary<double, object>();
-
-            // Dictionary<double, object>.ValueCollection valueColl = isotopes.Values;
-
-            double[] isotop = this.isotop;
+            Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
+            isotopes = this.isotopes;
 
             // init masses
             double massMo = 0;
             double massAv = 0;
             double maxAbundance = 0;
             double[] mass = new double[2];
+            double massMoAv = massMo + massAv;
             mass = this.mass;
-            mass_abud[0] = mass;
-            mass_abud[1] = maxAbundance;
-            DataTable isotopes = new DataTable();
-            isotopes.Columns.Add("Mass Number", typeof(double[]));
-            isotopes.Columns.Add("Mass_Abud", typeof(object));
-            isotopes = this.isotopes;
-            isotopes.Rows.Add(mass, mass_abud);
 
-            foreach (double cnt in isotopes.Columns)
+            mass_abud ma = new mass_abud(); //put in mass and mass_abud the vaules mass and max_abudance
+            ma.mass = massMoAv;
+            ma.mas_abud = maxAbundance;
+
+            foreach (KeyValuePair<double, mass_abud> isotop in isotopes)
             {
-                massAv += isotop[0] * isotop[1];
-                if (maxAbundance < isotop[1])
+                massAv += isotop.Value.mass * isotop.Value.mas_abud;
+                if (maxAbundance < isotop.Value.mas_abud)
                 {
-                    massMo = isotop[0];
-                    maxAbundance = isotop[1];
+                    massMo = isotop.Value.mass;
+                    maxAbundance = isotop.Value.mas_abud;
                 }
             }
             if (massMo == 0 || massAv == 0)
             {
             }
             mass[0] = massMo;
-            mass[1] = massAv;
-            //mass = Tuple.Create<double, double>(massMo, massAv);//self.mass = (massMo, massAv)
+            mass[1] = massAv;   //self.mass = (massMo, massAv)
         }
+    }
+
+    /*
+     * Used in the Dictionary ,Holds the vlues of the mass and the abundance
+     */
+
+    internal class mass_abud
+    {
+        public double mass { get; set; }
+        public double mas_abud { get; set; }
     }
 }

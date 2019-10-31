@@ -1,6 +1,5 @@
 ﻿using System;// math(implemented in System)
-using System.Data;
-using System.Text.RegularExpressions; // re
+using System.Collections.Generic;
 
 namespace mMass
 {
@@ -10,8 +9,41 @@ namespace mMass
         public const string FORMULA_PATTERN = @"^(([\(])*(([A-Za-z0-2])(\{[\d]+\})?(([\-][\d]+)|[\d]*))+([\)][\d]*)*)*$";
         public const string ELEMENT_PATTERN = @"([A-Za-z0-2])(\{[\d]+\})?(([\-][\d]+)|[\d]*)";
 
+        public double massMo;
+        public double massAv;
+
         public void move()
         {
+            Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
+
+            //  double[] isotop = new double[2];
+
+            // init masses
+            double massMo = 600.3595;
+            double massAv = 0;
+            double maxAbundance = 0.4052;
+            double mass = 604.4052;
+
+            isotopes.Add(massAv, new mass_abud() { mass = 604.4052, mas_abud = 600.4052 });
+            isotopes.Add(massAv + 1, new mass_abud() { mass = 605.4052, mas_abud = 620.4052 });
+            // isotopes.ToList().ForEach(x => Console.WriteLine(x.Key));
+
+            foreach (KeyValuePair<double, mass_abud> isotop in isotopes)
+            {
+                massAv += isotop.Value.mass * isotop.Value.mas_abud;
+                if (maxAbundance < isotop.Value.mas_abud)
+                {
+                    massMo = isotop.Value.mass;
+                    maxAbundance = isotop.Value.mas_abud;
+                    // Console.WriteLine(massMo);
+                    // Console.WriteLine(maxAbundance);
+                }
+            }
+            massAv = 0;
+            if (massMo == 0 || massAv == 0)
+            {
+            }
+
             ///*
             // * Αυτές οι γραμμές απο κάτω 8α αντικαταστήσουν μαλλον το ήδη υπάρχον
             // */
@@ -60,7 +92,7 @@ namespace mMass
             }
         }
 
-        public float mz(/*double mass,*/int charge, int currentCharge, string agentFormula, int agentCharge, int massType)
+        public double mz(int charge, int currentCharge, string agentFormula, int agentCharge, int massType)
         {
             /*
              *
@@ -75,8 +107,9 @@ namespace mMass
              */
 
             double[] agentMass = new double[2];
-            double[] mass = new double[2];
-
+            Tuple<double, double> mass = new Tuple<double, double>(massMo, massAv);
+            double masssum;
+            double[] table_for_massTuple = new double[2];// to xrhsimopoiw sto else:  mass = mass * abs(currentCharge) - agentMass[massType] * agentCount
             currentCharge = 0;
             agentFormula = "H";
             agentCharge = 1;
@@ -116,27 +149,32 @@ namespace mMass
             int agentCount = currentCharge / agentCharge;
             if (currentCharge != 0)
             {
-                //  if () {
-                //  } // na to κανω αφου κανω τους Constructors στην obj_compound
-                //  else
-                mass[0] = searcher.mass().Item1;
-                mass[1] = searcher.mass().Item2;
-                for (int i = 0; i < 2; i++)
-                    mass[i] = mass[i] * Math.Abs(currentCharge) - agentMass[massType] * agentCount;
-
-                //OR
-                // else
-                // mass = searcher.mass().Item1 + searcher.mass().Item2;
+                if (mass != null)//not so sure
+                {
+                    massMo = mass.Item1 * Math.Abs(currentCharge) - agentMass[0] * agentCount;
+                    massAv = mass.Item2 * Math.Abs(currentCharge) - agentMass[1] * agentCount;
+                    mass = new Tuple<double, double>(searcher.mass().Item1, searcher.mass().Item2);
+                }
+                else
+                    table_for_massTuple[0] = mass.Item1 * Math.Abs(currentCharge) - agentMass[massType] * agentCount;
+                table_for_massTuple[1] = mass.Item2 * Math.Abs(currentCharge) - agentMass[massType] * agentCount;
+                mass = new Tuple<double, double>(table_for_massTuple[0], table_for_massTuple[1]);
             }
+
             if (charge == 0)
-                return 1; //return mass prepei na kanw na to dw pws;
+                return masssum = mass.Item1 + mass.Item2; //return  kanw ena masss pou einai mass[]+mass[]
 
             // calculate final charge
             agentCount = charge / agentCharge;
-            /*
+            if (mass != null)//not so sure
+            {
+                massMo = (mass.Item1 + agentMass[0] * agentCount) / Math.Abs(charge);
+                massAv = (mass.Item2 + agentMass[1] * agentCount) / Math.Abs(charge);
 
-             */
-            return 0;
+                return masssum = mass.Item1 + mass.Item2;// auto emeine
+            }
+            else
+                return (mass.Item1 + mass.Item2 + agentMass[massType] * agentCount) / Math.Abs(charge);
         }
     }
 }
