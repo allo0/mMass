@@ -56,14 +56,14 @@ namespace mMass
             //check specified isotope and mass
             match = matchEL.Groups[0].Value;
             symbol = match;
-            // massNumber = match;
+            //massNumber = match;
             massNumber = 123.34;
             tmp = match;
             if (massNumber != null)
             {
-                //  isotope = ele.isotopes; // blocks.elements[symbol].isotopes[int(massNumber)]   line 200 in python
+                isotope = ele.symbol.isotopes[massNumber];    // blocks.elements[symbol].isotopes[int(massNumber)] // line 200 in python
                 atomMass[0] = isotope;
-                atomMass[1] = isotope;
+                atomMass[1] = isotope;      ///
             }
             else
             {

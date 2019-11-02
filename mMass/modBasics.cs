@@ -185,6 +185,9 @@ namespace mMass
             //kendrickFormula(str) - kendrick group formula
             //rounding(floor | ceil | round) - nominal mass rounding function
 
+            obj_compound searcher = new obj_compound(); //for the isinstace
+            double kendrickF;
+
             //return fractional part
             if (mdType == "fraction")
             {
@@ -194,7 +197,50 @@ namespace mMass
             //return standard mass defect
             else if (mdType == "standard")
             {
-                // return mass - nominalmass(mass, rounding);        // na ftiaksw thn Nominalmass
+                return mass - nominalmass(mass, rounding);
+            }
+
+            //return relative mass defect
+            else if (mdType == "relative")
+            {
+                return (10 ^ 6) * (mass - nominalmass(mass, rounding)) / mass;
+            }
+
+            //return Kendrick mass defect
+            else if (mdType == "kendrick")
+            {
+                if (!kendrickFormula.Equals(searcher.func_meto_compound()))
+                {
+                    kendrickFormula = searcher.func_meto_compound();
+                }
+                kendrickF = kendrickFormula.nominalmass() / kendrickFormula.mass(0)        // na ftiaksw thn Nominalmass
+                  return nominalmass(mass * kendrickF, rounding) - (mass * kendrickF)
+            }
+            else
+                throw new ArgumentException(String.Format("Unknown  mass defect type! --> ", mdType));
+        }
+
+        public double nominalmass(double mass, string rounding = "floor")
+        {
+            //Calculate for given monoisotopic mass and rounding function.
+            //mass(float) - monoisotopic mass
+            //rounding(floor | ceil | round) - nominal mass rounding function
+
+            if (rounding == "floor")
+            {
+                return Math.Floor(mass);
+            }
+            else if (rounding == "ceil")
+            {
+                return Math.Ceiling(mass);
+            }
+            else if (rounding == "round")
+            {
+                return Math.Round(mass);
+            }
+            else
+            {
+                throw new ArgumentException(String.Format("Unknown nominal mass rounding! --> ", rounding));
             }
         }
     }

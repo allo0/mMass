@@ -25,6 +25,10 @@ namespace mMass
 
         public element()
         {
+        }
+
+        public element()
+        {
             int atomicNumber = this.atomicNumber;
             int valence = this.valence;
 
