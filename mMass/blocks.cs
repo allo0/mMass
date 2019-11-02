@@ -45,7 +45,7 @@ namespace mMass
             ma.mass = massMoAv;
             ma.mas_abud = maxAbundance;
 
-            foreach (KeyValuePair<double, mass_abud> isotop in isotopes)
+            foreach (KeyValuePair<double, mass_abud> isotop in isotopes)  //for isotop in self.isotopes.values()
             {
                 massAv += isotop.Value.mass * isotop.Value.mas_abud;
                 if (maxAbundance < isotop.Value.mas_abud)
@@ -56,6 +56,7 @@ namespace mMass
             }
             if (massMo == 0 || massAv == 0)
             {
+                //line 50-60 pyton
             }
             mass[0] = massMo;
             mass[1] = massAv;   //self.mass = (massMo, massAv)

@@ -70,7 +70,7 @@ namespace mMass
             //Console.WriteLine(match);
         }
 
-        public float delta(float measuredMass, float countedMass, string units)
+        public float delta(float measuredMass, float countedMass, string units = "ppm")
         {
             /*
              *      Calculate error between measured Mass and counted Mass in specified units.
@@ -79,7 +79,6 @@ namespace mMass
              *       units (Da, ppm or %) - error units
              *
              */
-
             if (units == "ppm")
                 return (measuredMass - countedMass) / countedMass * 1000000;
             else if (units == "Da")
@@ -92,7 +91,7 @@ namespace mMass
             }
         }
 
-        public double mz(int charge, int currentCharge, string agentFormula, int agentCharge, int massType)
+        public double mz(Tuple<double, double> mass, int charge, int currentCharge = 0, int agentCharge = 1, int massType = 0, string agentFormula = "H")
         {
             /*
              *
@@ -107,13 +106,14 @@ namespace mMass
              */
 
             double[] agentMass = new double[2];
-            Tuple<double, double> mass = new Tuple<double, double>(massMo, massAv);
+            mass = new Tuple<double, double>(massMo, massAv);
             double masssum;
             double[] table_for_massTuple = new double[2];// to xrhsimopoiw sto else:  mass = mass * abs(currentCharge) - agentMass[massType] * agentCount
-            currentCharge = 0;
-            agentFormula = "H";
-            agentCharge = 1;
-            massType = 0;
+
+            //currentCharge = 0;
+            //agentFormula = "H";
+            // agentCharge = 1;
+            // massType = 0;
 
             obj_compound searcher = new obj_compound(); //for the isinstace
 
@@ -175,6 +175,27 @@ namespace mMass
             }
             else
                 return (mass.Item1 + mass.Item2 + agentMass[massType] * agentCount) / Math.Abs(charge);
+        }
+
+        public double md(double mass, string mdType = "standard", string kendrickFormula = "CH2", string rounding = "floor")
+        {
+            //Calculate mass defect for given monoisotopic mass.
+            //mass(double) - monoisotopic mass
+            //mdType(fraction | standard | relative | kendrick) - mass defect type
+            //kendrickFormula(str) - kendrick group formula
+            //rounding(floor | ceil | round) - nominal mass rounding function
+
+            //return fractional part
+            if (mdType == "fraction")
+            {
+                return mass - Math.Floor(mass);
+            }
+
+            //return standard mass defect
+            else if (mdType == "standard")
+            {
+                // return mass - nominalmass(mass, rounding);        // na ftiaksw thn Nominalmass
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ namespace mMass
             string match;
             string comp = composition();    // get composition
             string symbol;
-            string massNumber; //με μια μικρή επιφύλαξη για τον τύπο
+            double massNumber; //με μια μικρή επιφύλαξη για τον τύπο
             string tmp; //με μια μικρή επιφύλαξη για τον τύπο
 
             atom[0] = "C38H65N11O11S";//8a fygei apla gia testing;
@@ -57,11 +57,11 @@ namespace mMass
             match = matchEL.Groups[0].Value;
             symbol = match;
             // massNumber = match;
-            massNumber = "123.34";
+            massNumber = 123.34;
             tmp = match;
             if (massNumber != null)
             {
-                // isotope = ele.isotopes; // blocks.elements[symbol].isotopes[int(massNumber)]
+                //  isotope = ele.isotopes; // blocks.elements[symbol].isotopes[int(massNumber)]   line 200 in python
                 atomMass[0] = isotope;
                 atomMass[1] = isotope;
             }
