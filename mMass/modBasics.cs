@@ -70,6 +70,8 @@ namespace mMass
             //Console.WriteLine(match);
         }
 
+        //-----------------------------
+        //BASIC FUNCTIONS
         public float delta(float measuredMass, float countedMass, string units = "ppm")
         {
             /*
@@ -186,7 +188,7 @@ namespace mMass
             //rounding(floor | ceil | round) - nominal mass rounding function
 
             obj_compound searcher = new obj_compound(); //for the isinstace
-            double kendrickF;
+            double kendrickF = 0;//svinw to 0 meta
 
             //return fractional part
             if (mdType == "fraction")
@@ -213,8 +215,8 @@ namespace mMass
                 {
                     kendrickFormula = searcher.func_meto_compound();
                 }
-                kendrickF = kendrickFormula.nominalmass() / kendrickFormula.mass(0)        // na ftiaksw thn Nominalmass
-                  return nominalmass(mass * kendrickF, rounding) - (mass * kendrickF)
+                // kendrickF = kendrickFormula.nominalmass() / kendrickFormula.mass(0);      // na ftiaksw thn Nominalmass
+                return nominalmass(mass * kendrickF, rounding) - (mass * kendrickF);
             }
             else
                 throw new ArgumentException(String.Format("Unknown  mass defect type! --> ", mdType));
@@ -243,5 +245,10 @@ namespace mMass
                 throw new ArgumentException(String.Format("Unknown nominal mass rounding! --> ", rounding));
             }
         }
+
+        //-----------------------------
+
+        //-----------------------------
+        //FORMULA FUNCTIONS
     }
 }

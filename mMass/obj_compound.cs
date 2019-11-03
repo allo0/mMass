@@ -1,16 +1,85 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace mMass
 {
-    internal class obj_compound
+    internal class obj_compound     //Compound object definition.
     {
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         private object[] atom = new object[2];
 
-        public obj_compound(/*string expression, List<string> atrr*/)
+        public string name;
+        public double vale;
+        public string expression;
+        public string _composition;
+        public string _formula;
+        public double _mass; //paizei na einai  double[]
+        public double _nominalmass;
+        private object compound;
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        public obj_compound()
         {
         }
 
+        public obj_compound(string expression, Dictionary<string, double> attr)
+        {
+            string name = this.name;
+            double vale = this.vale;
+
+            // check formula
+            this._checkFormula(expression);
+            this.expression = expression;
+
+            //buffers
+            this._composition = null;
+            this._formula = null;
+            this._mass = 0;
+            this._nominalmass = 0;
+
+            //get additional attributes
+            attr = new Dictionary<string, double>();
+            for (int i = 0; i < attr.Count; i++)        //for name, value in attr.items():
+            {                                           //  self.attributes[name] = value
+                for (int j = 0; j < i; j++)
+                {
+                    attr.Add(name, vale);
+                }
+            }
+        }
+
+        public string _iadd_(string other)//Append formula.
+        {
+            //check and append value
+            if (other.Equals(compound))
+            {
+                this.expression = this.expression + other;
+            }
+            else
+            {
+                _checkFormula(other);
+                this.expression = this.expression + other;
+            }
+
+            //clear buffers
+            reset();
+
+            return expression;
+        }
+
+        public void reset()
+        {
+            //Clear formula buffers.
+            this._composition = null;
+            this._formula = null;
+            this._mass = 0;
+            this._nominalmass = 0;
+        }
+
+        //---------------------------
+        // Getters
         public string func_meto_compound()
         {
             string agentFormulae = "Hollla";
@@ -18,9 +87,8 @@ namespace mMass
             return agentFormulae;
         }
 
-        public Tuple<double, double> mass() //Get Mass
+        public Tuple<double, double> mass(int massType = 0) //Get Mass
         {
-            int massType = 0;   // αλλαζω τις τιμές,τις έχω μονο γia debug
             int count = 0;
             double[] atomMass = new double[2];
             double massMo = 1.0;  // αλλαζω τις τιμές,τις έχω μονο γia debug
@@ -63,7 +131,7 @@ namespace mMass
             {
                 isotope = ele.symbol.isotopes[massNumber];    // blocks.elements[symbol].isotopes[int(massNumber)] // line 200 in python
                 atomMass[0] = isotope;
-                atomMass[1] = isotope;      ///
+                atomMass[1] = isotope;
             }
             else
             {
@@ -100,6 +168,8 @@ namespace mMass
             }
         }
 
+        //---------------------------
+        //Helpers
         public void _checkFormula(string formula)
         {
             Match match2 = Regex.Match(formula, modBasics.FORMULA_PATTERN);
@@ -126,8 +196,12 @@ namespace mMass
             }
         }
 
+        //------------------------
+        //Getters
+
         public string composition() //na thn ftiaksw einai terma adeia
         {
+            //check composition buffer
             string x = "a";
             return x;
         }

@@ -15,27 +15,32 @@ namespace mMass
         valence: (int)
        */
 
-        public int atomicNumber;
-        public int valence;
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        public static string name { get; set; }
+
+        public static string symbol { get; set; }
+        public static int atomicNumber { get; set; }
+        public static int valence { get; set; }
 
         public double[] mass = new double[2];
-        public string name;
-        public string symbol;
-        public Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
+        public static Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
 
-        public element()
+        public static mass_abud ma = new mass_abud();
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        public element(string name, string symbol, int atomicNumber, Dictionary<double, mass_abud> isotopes, int valence)
         {
         }
 
         public element()
         {
-            int atomicNumber = this.atomicNumber;
-            int valence = this.valence;
+            string name;
+            string symbol;
+            int atomicNumber;
+            int valence;
 
-            string name = this.name;
-            string symbol = this.symbol;
-            Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
-            isotopes = this.isotopes;
+            //Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
+            // isotopes = this.isotopes;
 
             // init masses
             double massMo = 0;
@@ -43,7 +48,7 @@ namespace mMass
             double maxAbundance = 0;
             double[] mass = new double[2];
             double massMoAv = massMo + massAv;
-            mass = this.mass;
+            //mass = this.mass;
 
             mass_abud ma = new mass_abud(); //put in mass and mass_abud the vaules mass and max_abudance
             ma.mass = massMoAv;
@@ -58,6 +63,9 @@ namespace mMass
                     maxAbundance = isotop.Value.mas_abud;
                 }
             }
+            ma.mass = massMoAv;
+            ma.mas_abud = maxAbundance;
+
             if (massMo == 0 || massAv == 0)
             {
                 //line 50-60 pyton
@@ -65,6 +73,11 @@ namespace mMass
             mass[0] = massMo;
             mass[1] = massAv;   //self.mass = (massMo, massAv)
         }
+
+        internal Dictionary<string, element> Elements = new Dictionary<string, element>()
+        {
+            // {"Ac",new element( name="Actinium", symbol="Ac", atomicNumber=89, isotopes.Add(key:227,value:(227.02774700000001, 1.0)), valence = 3) }
+        };
     }
 
     /*
@@ -73,7 +86,10 @@ namespace mMass
 
     internal class mass_abud
     {
-        public double mass { get; set; }
+        //internal double mass;
+        //internal double mas_abud;
+
+        public double mass { get { return mass; } set { value = mass; } }
         public double mas_abud { get; set; }
     }
 }
