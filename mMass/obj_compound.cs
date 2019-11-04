@@ -80,6 +80,55 @@ namespace mMass
 
         //---------------------------
         // Getters
+
+        public int count(string item, bool groupIsotopes = false)
+        {
+            element ele = new element();
+            string atom = null;
+
+            int atomsCount = 0;
+
+            // get composition
+            string comp = this.composition();
+
+            //get atoms to count
+            var atoms = new List<string>();
+            if (groupIsotopes && item != null)// not so sure       if groupIsotopes and item in blocks.elements:
+            {
+                foreach (var massNo in ele.item.isotopes)//blocks.elements[item].isotopes:  den yparxei ele.item
+                {
+                    atom = item + massNo;//atom = '%s{%d}' % (item,massNo)
+                    atoms.Insert(0, atom);
+                }
+            }
+
+            //count atom
+            for (int i = 0; i < atoms.Count; i++)
+            {
+                if (comp.Contains(atom))
+                {
+                    atomsCount += comp[i];
+                }
+            }
+
+            return atomsCount;
+        }
+
+        public string formula()
+        {
+            //Get Formula
+            if (this._formula != null)
+            {
+                return this._formula;
+            }
+
+            this._formula = "";
+
+            //get composition
+            string comp = this.composition();
+            comp.Keys.ToArr
+        }
+
         public string func_meto_compound()
         {
             string agentFormulae = "Hollla";
@@ -197,7 +246,6 @@ namespace mMass
         }
 
         //------------------------
-        //Getters
 
         public string composition() //na thn ftiaksw einai terma adeia
         {
