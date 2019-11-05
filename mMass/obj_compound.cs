@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace mMass
@@ -9,6 +10,7 @@ namespace mMass
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         private object[] atom = new object[2];
 
+        public Dictionary<string, element> elements = new Dictionary<string, element>();
         public string name;
         public double vale;
         public string expression;
@@ -69,9 +71,8 @@ namespace mMass
             return expression;
         }
 
-        public void reset()
+        public void reset() //Clear formula buffers.
         {
-            //Clear formula buffers.
             this._composition = null;
             this._formula = null;
             this._mass = 0;
@@ -80,8 +81,9 @@ namespace mMass
 
         //---------------------------
         // Getters
+        //---------------------------
 
-        public int count(string item, bool groupIsotopes = false)
+        public int count(string item, bool groupIsotopes = false)//Count atom in formula.
         {
             element ele = new element();
             string atom = null;
@@ -114,9 +116,8 @@ namespace mMass
             return atomsCount;
         }
 
-        public string formula()
+        public string formula() //Get Formula
         {
-            //Get Formula
             if (this._formula != null)
             {
                 return this._formula;
@@ -125,18 +126,36 @@ namespace mMass
             this._formula = "";
 
             //get composition
-            string comp = this.composition();
-            comp.Keys.ToArr
+
+            string comp = this.composition();//na to kanw
+            return comp;
         }
 
         public string func_meto_compound()
         {
-            string agentFormulae = "Hollla";
+            string agentFormulae = "H";
 
             return agentFormulae;
         }
 
-        public Tuple<double, double> mass(int massType = 0) //Get Mass
+        public string composition() //na thn ftiaksw einai terma adeia
+        {   //Get elemental composition
+            //check composition buffer
+            if (this._composition != null)
+            {
+                return this._composition;
+            }
+
+            // unfold brackets
+            string unfoldedFormula = this._unfoldBrackets(this.expression);
+
+            //group elements
+
+            string x = "a";
+            return x;
+        }
+
+        public Tuple<double, double> mass(int massType = 0)//Get Mass
         {
             int count = 0;
             double[] atomMass = new double[2];
@@ -178,9 +197,9 @@ namespace mMass
             tmp = match;
             if (massNumber != null)
             {
-                isotope = ele.symbol.isotopes[massNumber];    // blocks.elements[symbol].isotopes[int(massNumber)] // line 200 in python
-                atomMass[0] = isotope;
-                atomMass[1] = isotope;
+                // isotope = ele.symbol.isotopes[massNumber];    // blocks.elements[symbol].isotopes[int(massNumber)] // line 200 in python
+                // atomMass[0] = isotope;
+                // atomMass[1] = isotope;
             }
             else
             {
@@ -218,8 +237,27 @@ namespace mMass
         }
 
         //---------------------------
+        //Modifiers
+        //---------------------------
+
+        public void negate()//Make all atom counts negative
+        {
+            // get composition
+            string comp = composition();    // get composition
+
+            //negate composition
+            string formula = "";
+            foreach (var el in comp.)
+
+                //clear buffers
+                this.reset();
+        }
+
+        //---------------------------
         //Helpers
-        public void _checkFormula(string formula)
+        //---------------------------
+
+        public void _checkFormula(string formula)//Check given formula.
         {
             Match match2 = Regex.Match(formula, modBasics.FORMULA_PATTERN);
             element ele = new element();
@@ -240,41 +278,68 @@ namespace mMass
                 else if (!ele.symbol.Contains(atom[0].ToString()))
                 {
                     atom[1] = ele.isotopes;
-                    //  ele.isotopes[]
+                    ele.isotopes[]
                 }
             }
         }
 
-        //------------------------
-
-        public string composition() //na thn ftiaksw einai terma adeia
+        public string _unfoldBrackets(string str) //Unfold formula and count each atom.
         {
-            //check composition buffer
-            string x = "a";
-            return x;
-        }
-    }
+            string unfoldedFormula = "";
+            int[,] brackets = new int[1, 2];//instead of a list its a 1x2 array
+            string enclosedFormula = "";
 
-    /// <summary>
-    /// Contains static text methods.
-    /// Put this in a separate class in your project.
-    /// </summary>
-    public static class TextTool
-    {
-        /// <summary>
-        /// Count occurrences of strings.
-        /// </summary>
-        public static int CountStringOccurrences(string text, string pattern)
-        {
-            // Loop through all instances of the string 'text'.
-            int count = 0;
             int i = 0;
-            while ((i = text.IndexOf(pattern, i)) != -1)
+            while (i < str.Length)
             {
-                i += pattern.Length;
-                count++;
+                //handle brackets
+                if (str[i].Equals("("))
+                {
+                    brackets[0, 0] += 1;
+                }
+                else if (str[i].Equals(")"))
+                {
+                    brackets[0, 1] += 1;
+                }
+
+                //part outside brackets
+                if (brackets[0, 0] == 0 || brackets[0, 1] == 0)
+                {
+                    unfoldedFormula += str[i];
+                }
+                // part within brackets
+                else
+                {
+                    enclosedFormula += str[i];
+                    //unfold part within brackets
+                    if (brackets[0, 0] == brackets[0, 1])
+                    {
+                        string trimmed = str.Substring(1, str.Length - 1);
+                        enclosedFormula = this._unfoldBrackets(trimmed);
+
+                        //multiply part within brackets
+                        string count = "";
+                        bool b1 = TextTool.IsNumeric(str[i + 1]); //true
+                        while (str.Length > (i + 1) && b1)
+                        {
+                            count += str[i + 1];
+                            i += 1;
+                        }
+                        if (count != null)
+                        {
+                            int count_num = int.Parse(count);  //int(count)
+                            enclosedFormula = String.Concat(Enumerable.Repeat(enclosedFormula, count_num));
+                        }
+                        // add and clear
+                        unfoldedFormula += enclosedFormula;
+                        enclosedFormula = "";
+                        brackets[0, 0] = 0;
+                        brackets[0, 1] = 0;
+                    }
+                }
+                i += 1;
             }
-            return count;
+            return unfoldedFormula;
         }
     }
 }

@@ -12,66 +12,14 @@ namespace mMass
         public double massMo;
         public double massAv;
 
-        public void move()
+        public void move()//Testing Funciton
         {
-            Dictionary<double, mass_abud> isotopes = new Dictionary<double, mass_abud>();
-
-            //  double[] isotop = new double[2];
-
-            // init masses
-            double massMo = 600.3595;
-            double massAv = 0;
-            double maxAbundance = 0.4052;
-            double mass = 604.4052;
-
-            isotopes.Add(massAv, new mass_abud() { mass = 604.4052, mas_abud = 600.4052 });
-            isotopes.Add(massAv + 1, new mass_abud() { mass = 605.4052, mas_abud = 620.4052 });
-            // isotopes.ToList().ForEach(x => Console.WriteLine(x.Key));
-
-            foreach (KeyValuePair<double, mass_abud> isotop in isotopes)
-            {
-                massAv += isotop.Value.mass * isotop.Value.mas_abud;
-                if (maxAbundance < isotop.Value.mas_abud)
-                {
-                    massMo = isotop.Value.mass;
-                    maxAbundance = isotop.Value.mas_abud;
-                    // Console.WriteLine(massMo);
-                    // Console.WriteLine(maxAbundance);
-                }
-            }
-            massAv = 0;
-            if (massMo == 0 || massAv == 0)
-            {
-            }
-
-            ///*
-            // * Αυτές οι γραμμές απο κάτω 8α αντικαταστήσουν μαλλον το ήδη υπάρχον
-            // */
-            //object[] atom = new object[2];
-            //atom[0] = "C38H65N11O11S";//8a fygei apla gia testing;
-            //MatchCollection matchEL = Regex.Matches(atom[0].ToString(), ELEMENT_PATTERN);
-            //Match firstMatch = matchEL[0];
-            //int i = 0;
-            //foreach (Match fm in matchEL)
-            //{
-            //    Console.WriteLine(matchEL[i]);
-            //    i++;
-            //}
-
-            ///*
-            // * Ηδη υπάρχον
-            // */
-            //string match;
-            //object[] atom = new object[2];
-            //atom[0] = "C38H65N11O11S";//8a fygei apla gia testing;
-            //Match matchEL = Regex.Match(atom[0].ToString(), modBasics.ELEMENT_PATTERN);
-
-            //match = matchEL.Groups[0].Value;
-            //Console.WriteLine(match);
         }
 
         //-----------------------------
         //BASIC FUNCTIONS
+        //-----------------------------
+
         public float delta(float measuredMass, float countedMass, string units = "ppm")
         {
             /*
@@ -247,8 +195,7 @@ namespace mMass
         }
 
         //-----------------------------
-
-        //-----------------------------
         //FORMULA FUNCTIONS
+        //-----------------------------
     }
 }

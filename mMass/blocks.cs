@@ -28,6 +28,9 @@ namespace mMass
         public static mass_abud ma = new mass_abud();
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        public element(string name, string symbol, int atomicNumber, Dictionary<double, mass_abud> isotopes, int valence)
+        {
+        }
 
         public element()
         {
@@ -71,13 +74,9 @@ namespace mMass
             mass[1] = massAv;   //self.mass = (massMo, massAv)
         }
 
-        public element(string name, string symbol, int atomicNumber, Dictionary<double, mass_abud> isotopes, int valence)
+        internal Dictionary<string, element> elements = new Dictionary<string, element>()
         {
-        }
-
-        internal Dictionary<string, element> Elements = new Dictionary<string, element>()
-        {
-             {"Ac",new element( name="Actinium", symbol="Ac", atomicNumber=89, isotopes.Add(key:227,value:(227.02774700000001, 1.0)), valence = 3) }
+            //{"Ac",new element( name="Actinium", symbol="Ac", atomicNumber=89, isotopes.Add(key:227,value:(227.02774700000001, 1.0)), valence = 3) }
         };
     }
 
