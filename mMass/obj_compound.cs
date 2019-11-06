@@ -90,7 +90,7 @@ namespace mMass
 
             int atomsCount = 0;
 
-            // get composition
+            // get composition prob dictionary instead of string prob dictionary instead of string
             string comp = this.composition();
 
             //get atoms to count
@@ -168,7 +168,7 @@ namespace mMass
             double masss = _mass[0] + _mass[1];
 
             string match;
-            string comp = composition();    // get composition
+            string comp = composition();    // get composition prob dictionary instead of string prob dictionary instead of string
             string symbol;
             double massNumber; //με μια μικρή επιφύλαξη για τον τύπο
             string tmp; //με μια μικρή επιφύλαξη για τον τύπο
@@ -236,21 +236,50 @@ namespace mMass
             }
         }
 
+        public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition
+        {
+            //check agent formula
+            if (!(agentFormula == "e") && !agentFormula.Equals(func_meto_compound()))   //isinstance comp
+            {
+                agentFormula = func_meto_compound();
+            }
+            //make ion compound
+            if (charge != 0 && !(agentFormula == "e"))
+            {
+                string ionFormula = this.expression;
+            }
+        }
+
+        public bool frules(List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)//Check formula rules.
+        {
+            modBasics mb = new modBasics();
+            rules = new List<string>() { "HC", "NOPSC", "NOPS", "RDBE" };
+            HC = new Tuple<double, double>(0.1, 3.0);
+            NOPSC = new Tuple<int, int, int, int>(4, 3, 2, 3);
+            RDBE = new Tuple<int, int>(-1, 40);
+
+            return mb.frules(compound, rules, HC, NOPSC, RDBE);
+        }
+
         //---------------------------
-        //Modifiers
+        //Modifier(s)
         //---------------------------
 
         public void negate()//Make all atom counts negative
         {
-            // get composition
-            string comp = composition();    // get composition
+            // get composition prob dictionary instead of string
+            string comp = composition();    // get composition prob dictionary instead of string prob dictionary instead of string
 
             //negate composition
             string formula = "";
-            foreach (var el in comp.)
+            foreach (var el in comp.Keys())
+            {
+                formula += el + comp[el] * -1;         // '%s%d' % (el, -1 * comp[el])
+            }
+            this.expression = formula;
 
-                //clear buffers
-                this.reset();
+            //clear buffers
+            this.reset();
         }
 
         //---------------------------

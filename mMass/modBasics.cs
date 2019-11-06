@@ -194,6 +194,11 @@ namespace mMass
             }
         }
 
+        public bool frules(object compound, List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)
+        {
+            return true;
+        }
+
         //-----------------------------
         //FORMULA FUNCTIONS
         //-----------------------------
