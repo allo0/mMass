@@ -236,21 +236,19 @@ namespace mMass
             }
         }
 
-        /*
-                public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition
-                {
-                    //check agent formula
-                    if (!(agentFormula == "e") && !agentFormula.Equals(func_meto_compound()))   //isinstance comp
-                    {
-                        agentFormula = func_meto_compound();
-                    }
-                    //make ion compound
-                    if (charge != 0 && !(agentFormula == "e"))
-                    {
-                        string ionFormula = this.expression;
-                    }
-                }
-                */
+        public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition
+        {
+            //check agent formula
+            if (!(agentFormula == "e") && !agentFormula.Equals(func_meto_compound(agentFormula)))   //isinstance comp
+            {
+                agentFormula = func_meto_compound(agentFormula);
+            }
+            //make ion compound
+            if (charge != 0 && !(agentFormula == "e"))
+            {
+                string ionFormula = this.expression;
+            }
+        }
 
         public bool frules(List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)//Check formula rules.
         {

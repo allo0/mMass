@@ -36,7 +36,7 @@ namespace mMass
         public mass_abud ma = new mass_abud();
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        public element(string name, string symbol, int atomicNumber, Dictionary<double, mass_abud> isotopes, int valence) { }
+        public element(string name, string symbol, int atomicNumber, Dictionary<double, mass_abud> isotopes, int valence = 0) { }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         public element()
@@ -141,7 +141,7 @@ namespace mMass
         //***********************************************************************************************
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        public monomer(string abbr, string formula, List<string> losses, string name, string category) { }
+        public monomer(string abbr, string formula, List<string> losses, string name = "", string category = "") { }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -217,7 +217,7 @@ namespace mMass
         //***********************************************************************************************
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        public enzyme(string name, string expression, string nTermFormula, string cTermFormula, bool modsBefore, bool modsAfter) { }
+        public enzyme(string name = "", string expression = "", string nTermFormula = "", string cTermFormula = "", bool modsBefore = true, bool modsAfter = true) { }
 
         public enzyme()
         {
@@ -232,6 +232,114 @@ namespace mMass
         {
             {   "Arg-C",new enzyme(name="Arg-C",expression="[R][A-Z]",nTermFormula="H",cTermFormula="OH",modsBefore=false,modsAfter=true)   },
             {   "Asp-N",new enzyme(name="Asp-N",expression="[A-Z][D]",nTermFormula="H",cTermFormula="OH",modsBefore=true,modsAfter=false)   },
+        };
+    }
+
+    internal class fragment
+    {
+        //Peptide ion fragment object definition.
+        //name: (str) name
+        //teminus: (M or N or C on S or I) fragment type(M-molecular ion, N-terminal, C-terminal, I-internal, S-single amino)
+        //nTermFormula: (str) molecular formula of N-terminal gain or loss
+        //cTermFormula: (str) molecular formula of C-terminal gain or loss
+        //nTermFilter: (bool) filter N-terminal fragment
+        //cTermFilter: (bool) filter C-terminal fragment
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        //***********************************************************************************************
+
+        private static string name;
+        public string namee = name;
+        private static string teminus;
+        public string teminuss = teminus;
+        private static string nTermFormula;
+        public string nTermFormulaa = nTermFormula;
+        private static string cTermFormula;
+        public string cTermFormulaa = cTermFormula;
+        private static bool nTermFilter;
+        public bool nTermFilterr = nTermFilter;
+        private static bool cTermFilter;
+        public bool cTermFilterr = cTermFilter;
+        //***********************************************************************************************
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        public fragment(string name = "", string teminus = "", string nTermFormula = "", string cTermFormula = "", bool nTermFilter = false, bool cTermFilter = false)
+        {
+        }
+
+        public fragment()
+        {
+            obj_compound obc = new obj_compound();
+            //check formulae
+            string cmpd;
+            cmpd = obc.func_meto_compound(nTermFormula);
+            cmpd = obc.func_meto_compound(cTermFormula);
+        }
+
+        internal static Dictionary<string, fragment> fragments = new Dictionary<string, fragment>()
+        {
+            {   "M",new fragment(name="M",teminus="M",nTermFormula=null,cTermFormula=null,nTermFilter=false,cTermFilter=false)   },
+        };
+    }
+
+    internal class modification
+    {
+        //Modification object definition.
+        //name: (str) name
+        //gainFormula: (str) gain molecular formula
+        //lossFormula: (str) loss molecular formula
+        //aminoSpecifity: (str) specific amino acids which can be modified
+        //termSpecifity: (N or C) can modify N or C terminal amino acid
+        //description: (str) description
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        //***********************************************************************************************
+        private static string name;
+
+        public string namee = name;
+        private static string gainFormula;
+        public string gainFormulaa = gainFormula;
+        private static string lossFormula;
+        public string lossFormulaa = lossFormula;
+        private static string aminoSpecifity;
+        public string aminoSpecifityy = aminoSpecifity;
+        private static string termSpecifity;
+        public string termSpecifirtyy = termSpecifity;
+        private static string description;
+        public string descriptionn = description;
+        //***********************************************************************************************
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        public modification(string name = "", string gainFormula = "", string lossFormula = "", string aminoSpecifity = "", string termSpecifity = "", string description = "") { }
+
+        public modification()
+        {
+            obj_compound obc = new obj_compound();
+            int count = 0;
+
+            //init masses and composition
+            string lossCmpd;
+            string lossComposition;
+            lossCmpd = obc.func_meto_compound(lossFormula);
+            lossComposition = obc.composition();
+
+            string formula = gainFormula;
+            foreach (var el in lossComposition)
+            {
+                count++;
+                formula += el + (-1 * count);
+            }
+            string cmpd = obc.func_meto_compound(formula);
+            string composition = obc.composition();
+            double mass = obc._mass;
+        }
+
+        internal static Dictionary<string, modification> modifications = new Dictionary<string, modification>()
+        {
+            {   "Acetyl",new modification(name="Acetyl",gainFormula="C2H3O", lossFormula="H",aminoSpecifity="KCST",termSpecifity="N",description="Acetylation")   },
         };
     }
 }
