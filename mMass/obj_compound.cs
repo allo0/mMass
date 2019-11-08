@@ -131,9 +131,9 @@ namespace mMass
             return comp;
         }
 
-        public string func_meto_compound()
+        public string func_meto_compound(string agentFormulae)
         {
-            string agentFormulae = "H";
+            agentFormulae = "H";
 
             return agentFormulae;
         }
@@ -197,9 +197,9 @@ namespace mMass
             tmp = match;
             if (massNumber != null)
             {
-                // isotope = ele.symbol.isotopes[massNumber];    // blocks.elements[symbol].isotopes[int(massNumber)] // line 200 in python
-                // atomMass[0] = isotope;
-                // atomMass[1] = isotope;
+                isotope = ele.symbols[(int)massNumber];    // blocks.elements[symbol].isotopes[int(massNumber)] // line 200 in python
+                atomMass[0] = isotope;
+                atomMass[1] = isotope;
             }
             else
             {
@@ -236,19 +236,21 @@ namespace mMass
             }
         }
 
-        public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition
-        {
-            //check agent formula
-            if (!(agentFormula == "e") && !agentFormula.Equals(func_meto_compound()))   //isinstance comp
-            {
-                agentFormula = func_meto_compound();
-            }
-            //make ion compound
-            if (charge != 0 && !(agentFormula == "e"))
-            {
-                string ionFormula = this.expression;
-            }
-        }
+        /*
+                public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition
+                {
+                    //check agent formula
+                    if (!(agentFormula == "e") && !agentFormula.Equals(func_meto_compound()))   //isinstance comp
+                    {
+                        agentFormula = func_meto_compound();
+                    }
+                    //make ion compound
+                    if (charge != 0 && !(agentFormula == "e"))
+                    {
+                        string ionFormula = this.expression;
+                    }
+                }
+                */
 
         public bool frules(List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)//Check formula rules.
         {
@@ -272,9 +274,9 @@ namespace mMass
 
             //negate composition
             string formula = "";
-            foreach (var el in comp.Keys())
+            //   foreach (var el in comp.Keys())
             {
-                formula += el + comp[el] * -1;         // '%s%d' % (el, -1 * comp[el])
+                //       formula += el + comp[el] * -1;         // '%s%d' % (el, -1 * comp[el])
             }
             this.expression = formula;
 
@@ -300,14 +302,14 @@ namespace mMass
             for (int i = 0; i < TextTool.CountStringOccurrences(modBasics.ELEMENT_PATTERN, formula); i++)
             {
                 //check elements and isotopes
-                if (!ele.symbol.Contains(atom[0].ToString())) //δεν ξέρω ακομα αν ειναι το symbol ή απο το isotopes το πρώτο ορισμα
+                if (!ele.symbols.Contains(atom[0].ToString())) //δεν ξέρω ακομα αν ειναι το symbol ή απο το isotopes το πρώτο ορισμα
                 {
                     throw new ArgumentException(String.Format("Unknown element in formula! -->{0} in {1}-", atom[0], formula));
                 }
-                else if (!ele.symbol.Contains(atom[0].ToString()))
+                else if (!ele.symbols.Contains(atom[0].ToString()))
                 {
-                    atom[1] = ele.isotopes;
-                    ele.isotopes[]
+                    atom[1] = ele.isotopess;
+                    // ele.isotopes[]
                 }
             }
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace mMass
 {
-    internal class modBasics
+    internal class modBasics : element
     {
         public const double ELECTRON_MASS = 0.00054857990924d;
         public const string FORMULA_PATTERN = @"^(([\(])*(([A-Za-z0-2])(\{[\d]+\})?(([\-][\d]+)|[\d]*))+([\)][\d]*)*)*$";
@@ -13,7 +13,22 @@ namespace mMass
         public double massAv;
 
         public void move()//Testing Funciton
-        {
+        {//string name, string symbol, int atomicNumber, Dictionary<double, mass_abud> isotopes, int valence
+         //  element ele = new element();
+         //Console.WriteLine(elements.Values);
+            foreach (KeyValuePair<string, element> pair in elements)
+            {
+                foreach (var pairs in isotopess)
+                {
+                    Console.WriteLine("FOREACH KEYVALUEPAIR: {0}, {1}", pair.Key, pair.Value.atomicNumbers);
+                }
+            }
+            var list = new List<mass_abud>(elements["Ag"].isotopess.Values);
+            foreach (var val in list)
+            {
+                Console.WriteLine("KEY FROM LIST: " + val.mass);
+            }
+            Console.WriteLine(elements["Ag"].symbols);
         }
 
         //-----------------------------
@@ -68,9 +83,9 @@ namespace mMass
             obj_compound searcher = new obj_compound(); //for the isinstace
 
             //check agent formula
-            if (!(agentFormula == "e") && !agentFormula.Equals(searcher.func_meto_compound()))   //isinstance comp
+            if (!(agentFormula == "e") && !agentFormula.Equals(searcher.func_meto_compound(agentFormula)))   //isinstance comp
             {
-                agentFormula = searcher.func_meto_compound();
+                agentFormula = searcher.func_meto_compound(agentFormula);
             }
 
             // get agent mass
@@ -91,7 +106,6 @@ namespace mMass
                 for (int i = 0; i < 2; i++)
                 {
                     agentMass[i] = agentMass[i] - agentCharge * ELECTRON_MASS;
-                    //  Console.WriteLine("...{0}...", agentMass[i]);
                 }
             }
 
@@ -159,9 +173,9 @@ namespace mMass
             //return Kendrick mass defect
             else if (mdType == "kendrick")
             {
-                if (!kendrickFormula.Equals(searcher.func_meto_compound()))
+                if (!kendrickFormula.Equals(searcher.func_meto_compound(kendrickFormula)))
                 {
-                    kendrickFormula = searcher.func_meto_compound();
+                    kendrickFormula = searcher.func_meto_compound(kendrickFormula);
                 }
                 // kendrickF = kendrickFormula.nominalmass() / kendrickFormula.mass(0);      // na ftiaksw thn Nominalmass
                 return nominalmass(mass * kendrickF, rounding) - (mass * kendrickF);
