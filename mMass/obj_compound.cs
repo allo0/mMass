@@ -18,7 +18,7 @@ namespace mMass
         public string _formula;
         public double _mass; //paizei na einai  double[]
         public double _nominalmass;
-        private object compound;
+        private string compound;
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -97,7 +97,7 @@ namespace mMass
             var atoms = new List<string>();
             if (groupIsotopes && item != null)// not so sure       if groupIsotopes and item in blocks.elements:
             {
-                foreach (var massNo in ele.item.isotopes)//blocks.elements[item].isotopes:  den yparxei ele.item
+                foreach (var massNo in ele.isotopess)//blocks.elements[item].isotopes:  den yparxei ele.item
                 {
                     atom = item + massNo;//atom = '%s{%d}' % (item,massNo)
                     atoms.Insert(0, atom);
@@ -234,6 +234,11 @@ namespace mMass
             {
                 return Tuple.Create<double, double>(massMo, massAv);
             }
+        }
+
+        public double rdbe(string compound)
+        {
+            return rdbe(compound);
         }
 
         public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition

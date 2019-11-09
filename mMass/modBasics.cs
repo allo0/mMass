@@ -1,5 +1,6 @@
-﻿using System;// math(implemented in System)
+﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace mMass
 {
@@ -208,13 +209,134 @@ namespace mMass
             }
         }
 
-        public bool frules(object compound, List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)
-        {
-            return true;
-        }
-
         //-----------------------------
         //FORMULA FUNCTIONS
         //-----------------------------
+
+        public double rdbe(string compound)
+        {
+            //Get RDBE(Range or Double Bonds Equivalents) of a given compound.
+            //compound(str or mspy.compound) - compound
+
+            //check compound
+            obj_compound searcher = new obj_compound(); //for the isinstace
+            if (!(compound.Equals(searcher.func_meto_compound(compound))))
+            {
+                compound = searcher.func_meto_compound(compound);
+            }
+
+            //get composition
+            string comp = searcher.composition();
+
+            // get atoms from composition
+            List<string> atoms = new List<string>();
+            foreach (var item in comp)
+            {
+                Match match = Regex.Match(atom[0].ToString(), modBasics.ELEMENT_PATTERN);
+            }
+
+            return 1.3;
+        }
+
+        public bool frules(string compound, List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)
+        {
+            //Check formula rules for a given compound.
+            //compound(str or mspy.compound) - compound
+            //rules(list of str) - rules to be checked
+            //HC(tuple) - H / C limits
+            //NOPSC(tuple) - NOPS / C max values
+            //RDBE(tuple) - RDBE limits
+
+            rules.Add("HC");
+            rules.Add("NOPSC");
+            rules.Add("NOPS");
+            rules.Add("RDBE");
+            rules.Add("RDBEInt");
+            HC = Tuple.Create<double, double>(0.1, 3.0);
+            NOPSC = Tuple.Create<int, int, int, int>(4, 3, 2, 3);
+            RDBE = Tuple.Create<int, int>(-1, 40);
+
+            //check compound
+            obj_compound searcher = new obj_compound(); //for the isinstace
+            if (!(compound.Equals(searcher.func_meto_compound(compound))))
+            {
+                compound = searcher.func_meto_compound(compound);
+            }
+
+            //get element counts
+            double countC = searcher.count("C", true);
+            double countH = searcher.count("H", true);
+            double countN = searcher.count("N", true);
+            double countO = searcher.count("P", true);
+            double countP = searcher.count("P", true);
+            double countS = searcher.count("S", true);
+
+            double ratioHC = 0;
+            double ratioNC = 0;
+            double ratioOC = 0;
+            double ratioPC = 0;
+            double ratioSC = 0;
+
+            //get carbon ratios
+            if (countC != 0)
+            {
+                ratioHC = countH / countC;
+                ratioNC = countN / countC;
+                ratioOC = countO / countC;
+                ratioPC = countP / countC;
+                ratioSC = countS / countC;
+            }
+
+            //get RDBE
+            double rdbeValue = rdbe(compound);
+
+            //check HC rule
+            if (rules.Contains("HC") && countC != 0)
+                if (ratioHC < HC.Item1 || ratioHC > HC.Item2)
+                    return false;
+
+            // check NOPSC rule
+            if (rules.Contains("NOPSC") && countC != 0)
+                if (ratioNC > NOPSC.Item1 || ratioOC > NOPSC.Item2 || ratioPC > NOPSC.Item3 || ratioSC > NOPSC.Item4)
+                    return false;
+
+            //check NOPS all > 1 rule
+            if (rules.Contains("NOPSC") && (countN > 1 && countO > 1 && countP > 1 && countS > 1))
+                if (countN >= 10 || countO >= 20 || countP >= 4 || countS >= 3)
+                    return false;
+
+            //check NOP all > 3 rule
+            if (rules.Contains("NOPS") && (countN > 3 && countO > 3 && countP > 3))
+                if (countN >= 11 || countO >= 22 || countP >= 6)
+                    return false;
+
+            //check NOS all > 1 rule
+            if (rules.Contains("NOPS") && (countN > 1 && countO > 1 && countS > 1))
+                if (countN >= 19 || countO >= 14 || countS >= 8)
+                    return false;
+
+            //check NPS all > 1 rule
+            if (rules.Contains("NOPS") && (countN > 1 && countP > 1 && countS > 1))
+                if (countN >= 3 || countP >= 3 || countS >= 3)
+                    return false;
+
+            //check OPS all > 1 rule
+            if (rules.Contains("NOPS") && (countO > 1 && countP > 1 && countS > 1))
+                if (countO >= 14 || countP >= 3 || countS >= 3)
+                    return false;
+
+            //check RDBE range
+            if (rules.Contains("RDBE"))
+                if (rdbeValue < RDBE.Item1 || rdbeValue > RDBE.Item2)
+                    return false;
+
+            //check integer RDBE
+            if (rules.Contains("RDBE"))
+                if (rdbeValue % 1 != 0)
+                    return false;
+
+            //all guci
+            return true;
+        }
     }
 }
