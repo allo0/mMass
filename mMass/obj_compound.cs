@@ -26,7 +26,7 @@ namespace mMass
         {
         }
 
-        public obj_compound(string expression, Dictionary<string, double> attr)
+        public obj_compound(string expression)  /*, Dictionary<string, double> attr)*/
         {
             string name = this.name;
             double vale = this.vale;
@@ -42,14 +42,14 @@ namespace mMass
             this._nominalmass = 0;
 
             //get additional attributes
-            attr = new Dictionary<string, double>();
-            for (int i = 0; i < attr.Count; i++)        //for name, value in attr.items():
-            {                                           //  self.attributes[name] = value
-                for (int j = 0; j < i; j++)
-                {
-                    attr.Add(name, vale);
-                }
-            }
+            //attr = new Dictionary<string, double>();
+            //for (int i = 0; i < attr.Count; i++)        //for name, value in attr.items():
+            //{                                           //  self.attributes[name] = value
+            //    for (int j = 0; j < i; j++)
+            //    {
+            //        attr.Add(name, vale);
+            //    }
+            //}
         }
 
         public string _iadd_(string other)//Append formula.
@@ -126,20 +126,17 @@ namespace mMass
             this._formula = "";
 
             //get composition
-
             string comp = this.composition();//na to kanw
+
             return comp;
-        }
-
-        public string func_meto_compound(string agentFormulae)
-        {
-            agentFormulae = "H";
-
-            return agentFormulae;
         }
 
         public string composition() //na thn ftiaksw einai terma adeia
         {   //Get elemental composition
+            int count = 0;
+            string symbol = "";
+            string isotop = "";
+
             //check composition buffer
             if (this._composition != null)
             {
@@ -150,6 +147,14 @@ namespace mMass
             string unfoldedFormula = this._unfoldBrackets(this.expression);
 
             //group elements
+            Dictionary<string, string> composition = new Dictionary<string, string>();
+            for (int i = 0; i < TextTool.CountStringOccurrences(modBasics.ELEMENT_PATTERN, unfoldedFormula); i++)
+            {
+                //make atom
+                if (isotop != null)
+                {
+                }
+            }
 
             string x = "a";
             return x;
@@ -244,9 +249,9 @@ namespace mMass
         public bool isvalid(int charge = 0, string agentFormula = "H", int agentCharge = 1)//Check ion composition
         {
             //check agent formula
-            if (!(agentFormula == "e") && !agentFormula.Equals(func_meto_compound(agentFormula)))   //isinstance comp
+            if (!(agentFormula == "e") && !agentFormula.Equals(expression))   //isinstance comp
             {
-                agentFormula = func_meto_compound(agentFormula);
+                agentFormula = expression;
             }
             //make ion compound
             if (charge != 0 && !(agentFormula == "e"))

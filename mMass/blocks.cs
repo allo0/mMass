@@ -147,17 +147,19 @@ namespace mMass
 
         public monomer()
         {
-            obj_compound obc = new obj_compound();
+            obj_compound obc = new obj_compound(formula);
 
             //init masses and composition
-            string cmpd = obc.func_meto_compound(formula);
+            string cmpd = obc.expression;
             string composition = obc.composition();
             double mass = obc._mass;
 
             //check formulae
+
             foreach (var loss in losses)
             {
-                cmpd = obc.func_meto_compound(loss);
+                obc = new obj_compound(loss);
+                cmpd = obc.expression;
             }
         }
 
@@ -224,8 +226,10 @@ namespace mMass
             obj_compound obc = new obj_compound();
             //check formulae
             string cmpd;
-            cmpd = obc.func_meto_compound(nTermFormula);
-            cmpd = obc.func_meto_compound(cTermFormula);
+            obc = new obj_compound(nTermFormula);
+            cmpd = obc.expression;
+            obc = new obj_compound(cTermFormula);
+            cmpd = obc.expression;
         }
 
         internal static Dictionary<string, enzyme> enzymes = new Dictionary<string, enzyme>()
@@ -274,8 +278,10 @@ namespace mMass
             obj_compound obc = new obj_compound();
             //check formulae
             string cmpd;
-            cmpd = obc.func_meto_compound(nTermFormula);
-            cmpd = obc.func_meto_compound(cTermFormula);
+            obc = new obj_compound(nTermFormula);
+            cmpd = obc.expression;
+            obc = new obj_compound(cTermFormula);
+            cmpd = obc.expression;
         }
 
         internal static Dictionary<string, fragment> fragments = new Dictionary<string, fragment>()
@@ -317,13 +323,13 @@ namespace mMass
 
         public modification()
         {
-            obj_compound obc = new obj_compound();
+            obj_compound obc = new obj_compound(lossFormula);
             int count = 0;
 
             //init masses and composition
             string lossCmpd;
             string lossComposition;
-            lossCmpd = obc.func_meto_compound(lossFormula);
+            lossCmpd = obc.expression;
             lossComposition = obc.composition();
 
             string formula = gainFormula;
@@ -332,7 +338,8 @@ namespace mMass
                 count++;
                 formula += el + (-1 * count);
             }
-            string cmpd = obc.func_meto_compound(formula);
+            obc = new obj_compound(formula);
+            string cmpd = obc.expression;
             string composition = obc.composition();
             double mass = obc._mass;
         }

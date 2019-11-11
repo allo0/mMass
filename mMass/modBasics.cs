@@ -81,12 +81,12 @@ namespace mMass
             // agentCharge = 1;
             // massType = 0;
 
-            obj_compound searcher = new obj_compound(); //for the isinstace
+            obj_compound searcher = new obj_compound(agentFormula); //for the isinstace
 
             //check agent formula
-            if (!(agentFormula == "e") && !agentFormula.Equals(searcher.func_meto_compound(agentFormula)))   //isinstance comp
+            if (!(agentFormula == "e") && !agentFormula.Equals(searcher.expression))   //isinstance comp
             {
-                agentFormula = searcher.func_meto_compound(agentFormula);
+                agentFormula = searcher.expression;
             }
 
             // get agent mass
@@ -150,7 +150,7 @@ namespace mMass
             //kendrickFormula(str) - kendrick group formula
             //rounding(floor | ceil | round) - nominal mass rounding function
 
-            obj_compound searcher = new obj_compound(); //for the isinstace
+            obj_compound searcher = new obj_compound(kendrickFormula); //for the isinstace
             double kendrickF = 0;//svinw to 0 meta
 
             //return fractional part
@@ -174,9 +174,9 @@ namespace mMass
             //return Kendrick mass defect
             else if (mdType == "kendrick")
             {
-                if (!kendrickFormula.Equals(searcher.func_meto_compound(kendrickFormula)))
+                if (!kendrickFormula.Equals(searcher.expression))
                 {
-                    kendrickFormula = searcher.func_meto_compound(kendrickFormula);
+                    kendrickFormula = searcher.expression;
                 }
                 // kendrickF = kendrickFormula.nominalmass() / kendrickFormula.mass(0);      // na ftiaksw thn Nominalmass
                 return nominalmass(mass * kendrickF, rounding) - (mass * kendrickF);
@@ -219,10 +219,10 @@ namespace mMass
             //compound(str or mspy.compound) - compound
 
             //check compound
-            obj_compound searcher = new obj_compound(); //for the isinstace
-            if (!(compound.Equals(searcher.func_meto_compound(compound))))
+            obj_compound searcher = new obj_compound(compound); //for the isinstace
+            if (!(compound.Equals(searcher.expression)))
             {
-                compound = searcher.func_meto_compound(compound);
+                compound = searcher.expression;
             }
 
             //get composition
@@ -232,10 +232,28 @@ namespace mMass
             List<string> atoms = new List<string>();
             foreach (var item in comp)
             {
-                Match match = Regex.Match(atom[0].ToString(), modBasics.ELEMENT_PATTERN);
+                Match match = Regex.Match(item.ToString(), comp);
+
+                if (match != null && match.Groups[0].Value == null)//8a einai group[0] h group[1]
+                {
+                    atoms.Add(match.Groups[0].Value);
+                }
             }
 
-            return 1.3;
+            //get rdbe
+            double rdbeValue = 0.0;
+            foreach (var a in atoms)
+            {
+                int valence = element.elements[a].valences;
+                if (valence != 0)
+                {
+                    rdbeValue += (valence - 2) * searcher.count(a, true);
+                }
+            }
+            rdbeValue /= 2.0;
+            rdbeValue += 1.0;
+
+            return rdbeValue;
         }
 
         public bool frules(string compound, List<string> rules, Tuple<double, double> HC, Tuple<int, int, int, int> NOPSC, Tuple<int, int> RDBE)
@@ -257,10 +275,10 @@ namespace mMass
             RDBE = Tuple.Create<int, int>(-1, 40);
 
             //check compound
-            obj_compound searcher = new obj_compound(); //for the isinstace
-            if (!(compound.Equals(searcher.func_meto_compound(compound))))
+            obj_compound searcher = new obj_compound(compound); //for the isinstace
+            if (!(compound.Equals(searcher.expression)))
             {
-                compound = searcher.func_meto_compound(compound);
+                compound = searcher.expression;
             }
 
             //get element counts
